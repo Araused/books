@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Authors;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\search\BooksSearch */
@@ -15,23 +16,29 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'author_id')->dropDownList(Authors::getAuthorsList(), ['prompt' => '']) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'name') ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'name') ?>
-
-    <?= $form->field($model, 'date_create') ?>
-
-    <?= $form->field($model, 'date_update') ?>
-
-    <?= $form->field($model, 'preview') ?>
-
-    <?php // echo $form->field($model, 'date') ?>
-
-    <?php // echo $form->field($model, 'author_id') ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'dateStart') ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'dateEnd') ?>
+        </div>
+    </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <div class="text-right">
+            <?= Html::submitButton('Искать', ['class' => 'btn btn-primary']) ?>
+            <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

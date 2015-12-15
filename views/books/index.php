@@ -13,25 +13,40 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="books-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Books', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?= $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'name',
-            'date_create',
-            'date_update',
-            'preview',
-            // 'date',
-            // 'author_id',
+            [
+                'attribute' => 'preview',
+                'format' => 'html',
+                'value' => function ($data) {
+                    if ($data->previewUrl !== null) {
+                        return Html::img($data->previewUrl, [
+                            'class' => 'img-thumb img-responsive',
+                            'style' => 'width: 80px;',
+                        ]);
+                    }
+                    return null;
+                },
+            ],
+            [
+                'attribute' => 'author_id',
+                'value' => function ($data) {
+                    return $data->author->fullName;
+                },
+            ],
+            [
+                'attribute' => 'date',
+                'format' => ['date', 'php:d.m.Y'],
+            ],
+            [
+                'attribute' => 'date_create',
+                'format' => ['date', 'php:d.m.Y H:i:s'],
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

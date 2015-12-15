@@ -12,14 +12,17 @@ use app\models\Books;
  */
 class BooksSearch extends Books
 {
+    public $dateStart;
+    public $dateEnd;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'author_id'], 'integer'],
-            [['name', 'date_create', 'date_update', 'preview', 'date'], 'safe'],
+            [['author_id'], 'integer'],
+            [['name', 'dateStart', 'dateEnd'], 'safe'],
         ];
     }
 
@@ -32,6 +35,14 @@ class BooksSearch extends Books
         return Model::scenarios();
     }
 
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'dateStart' => 'Дата выхода, с',
+            'dateEnd' => 'Дата выхода, по',
+        ]);
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -41,8 +52,7 @@ class BooksSearch extends Books
      */
     public function search($params)
     {
-        $query = Books::find();
-
+        $query = Books::find()->joinWith('author');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -50,21 +60,11 @@ class BooksSearch extends Books
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'date_create' => $this->date_create,
-            'date_update' => $this->date_update,
-            'author_id' => $this->author_id,
-        ]);
-
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'preview', $this->preview])
-            ->andFilterWhere(['like', 'date', $this->date]);
+        $query->andFilterWhere(['author_id' => $this->author_id]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

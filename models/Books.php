@@ -19,6 +19,8 @@ use Yii;
  */
 class Books extends \yii\db\ActiveRecord
 {
+    protected $previewDir = '@web/img';
+
     /**
      * @inheritdoc
      */
@@ -47,12 +49,12 @@ class Books extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'date_create' => 'Date Create',
-            'date_update' => 'Date Update',
-            'preview' => 'Preview',
-            'date' => 'Date',
-            'author_id' => 'Author ID',
+            'name' => 'Название',
+            'date_create' => 'Дата добавления',
+            'date_update' => 'Дата обновления',
+            'preview' => 'Превью',
+            'date' => 'Дата выхода',
+            'author_id' => 'Автор',
         ];
     }
 
@@ -62,5 +64,13 @@ class Books extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(Authors::className(), ['id' => 'author_id']);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPreviewUrl()
+    {
+        return $this->preview ? Yii::getAlias($this->previewDir) . '/' . $this->preview : null;
     }
 }
