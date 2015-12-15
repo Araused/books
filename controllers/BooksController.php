@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 
 /**
  * BooksController implements the CRUD actions for Books model.
@@ -45,6 +46,8 @@ class BooksController extends Controller
         $searchModel = new BooksSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        Url::remember();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -58,8 +61,16 @@ class BooksController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        if (Yii::$app->getRequest()->isAjax) {
+            return $this->renderAjax('view', [
+                'model' => $model,
+            ]);
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -92,7 +103,7 @@ class BooksController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Url::previous());
         }
 
         return $this->render('update', [

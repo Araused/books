@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\grid\ActionColumn;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\BooksSearch */
@@ -26,8 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     if ($data->previewUrl !== null) {
                         return Html::img($data->previewUrl, [
-                            'class' => 'img-thumb img-responsive',
-                            'style' => 'width: 80px;',
+                            'class' => 'book-img',
+                            'title' => 'Нажмите для изменения размера',
                         ]);
                     }
                     return null;
@@ -45,11 +47,36 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'date_create',
-                'format' => ['date', 'php:d.m.Y H:i:s'],
+                'format' => ['date', 'php:d.m.Y'],
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => ActionColumn::className(),
+                'header' => 'Действия',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                       return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                           'class' => 'view-book',
+                           'data-toggle' => 'modal',
+                           'data-target' => '#view-book-modal',
+                       ]);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                           'target' => '_blank',
+                       ]);
+                    }
+                ],
+            ],
         ],
     ]); ?>
+    
+    <?php Modal::begin([
+        'id' => 'view-book-modal',
+        'header' => 'View',
+        'size' => 'modal-lg',
+    ]); ?>
+    <div id="book-info"></div>
+    <?php Modal::end(); ?>
 
 </div>

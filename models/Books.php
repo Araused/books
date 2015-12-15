@@ -73,4 +73,14 @@ class Books extends \yii\db\ActiveRecord
     {
         return $this->preview ? Yii::getAlias($this->previewDir) . '/' . $this->preview : null;
     }
+    
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->date_create = date('Y-m-d H:i:s');
+        }
+        $this->date_update = date('Y-m-d H:i:s');
+
+        return parent::beforeSave($insert);
+    }
 }

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Authors;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\search\BooksSearch */
@@ -27,10 +28,30 @@ use app\models\Authors;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'dateStart') ?>
+            <?= $form->field($model, 'dateStart')->widget(DatePicker::className(), [
+                'language' => 'ru',
+                'type' => DatePicker::TYPE_INPUT,
+                'options' => [
+                    'class' => 'form-control',
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd',
+                ],
+            ]) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'dateEnd') ?>
+            <?= $form->field($model, 'dateEnd')->widget(DatePicker::className(), [
+                'language' => 'ru',
+                'type' => DatePicker::TYPE_INPUT,
+                'options' => [
+                    'class' => 'form-control',
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd',
+                ],
+            ]) ?>
         </div>
     </div>
 

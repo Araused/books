@@ -66,6 +66,13 @@ class BooksSearch extends Books
         $query->andFilterWhere(['author_id' => $this->author_id]);
         $query->andFilterWhere(['like', 'name', $this->name]);
 
+        if (!empty($this->dateStart)) {
+            $query->andFilterWhere(['>=', 'date', $this->dateStart]);
+        }
+        if (!empty($this->dateEnd)) {
+            $query->andFilterWhere(['<=', 'date', $this->dateEnd]);
+        }
+
         return $dataProvider;
     }
 }
